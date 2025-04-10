@@ -59,15 +59,22 @@ const answeredQuestions = [
 let currentQuestionIndex = 0;
 let currentTimer = answeredQuestions[currentQuestionIndex].timer;
 let timerInterval;
+let isPaused = false;
 
 function startTimer() {
+  if (isPaused) return;
   timerInterval = setInterval(() => {
+    if (isPaused) {
+      clearInterval(timerInterval);
+      return;
+    }
     currentTimer--;
     document.getElementById('timer').textContent = `Time remaining: ${currentTimer}s`;
 
     if (currentTimer <= 0) {
       clearInterval(timerInterval);
-      alert("Time's up!");
+      showFeedback("Time's up!");
+      showCorrectAnswer();
       showNextQuestion();
     }
   }, 1000);
@@ -82,11 +89,23 @@ function showNextQuestion() {
   }
 }
 
+function showCorrectAnswer() {
+  const correctOption = document.querySelectorAll('.option').forEach(option => {
+    if (option.textContent === answeredQuestions[currentQuestionIndex].answer) {
+      option.classList.add('correct');
+      const circle = document.createElement('span');
+      circle.classList.add('correct-circle');
+      option.appendChild(circle);
+    }
+  });
+}
+
 function displayQuestion() {
   const question = answeredQuestions[currentQuestionIndex];
   document.getElementById('question').textContent = question.question;
   document.getElementById('options').innerHTML = '';
-  
+  document.getElementById('message').textContent = '';
+
   question.options.forEach(option => {
     const button = document.createElement('button');
     button.classList.add('option');
@@ -101,13 +120,30 @@ function displayQuestion() {
 
 function handleAnswer(selectedOption, correctAnswer) {
   if (selectedOption === correctAnswer) {
-    alert("Correct!");
+    showFeedback("Correct!");
+    document.getElementById('message').textContent = "You answered correctly!";
   } else {
-    alert(`Incorrect! The correct answer was: ${correctAnswer}`);
+    showFeedback("Incorrect!");
+    document.getElementById('message').textContent = `Incorrect! The correct answer was: ${correctAnswer}`;
+    showCorrectAnswer();
   }
   clearInterval(timerInterval);
   showNextQuestion();
 }
 
-// Initialize the game
+function showFeedback(message) {
+  document.getElementById('message').textContent = message;
+}
+
+document.getElementById('pauseButton').onclick = () => {
+  isPaused = !isPaused;
+  if (isPaused) {
+    clearInterval(timerInterval);
+    document.getElementById('pauseButton').textContent = "Resume";
+  } else {
+    startTimer();
+    document.getElementById('pauseButton').textContent = "Pause";
+  }
+};
+
 displayQuestion();
