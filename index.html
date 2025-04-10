@@ -3,161 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Millon Doller Game🤑</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      padding: 20px;
-      text-align: center;
-    }
-    .question {
-      font-size: 20px;
-      margin: 20px 0;
-    }
-    .options {
-      margin: 20px 0;
-    }
-    .option {
-      background-color: #4285f4;
-      color: white;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      margin: 5px;
-      border-radius: 5px;
-    }
-    .option:hover {
-      background-color: #365d8a;
-    }
-    #timer {
-      font-size: 18px;
-      color: red;
-    }
-  </style>
+  <title>Trivia Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Trivia Game</h1>
   <div id="question-container">
     <div id="question" class="question"></div>
     <div id="options" class="options"></div>
-    <div id="timer"></div>
+    <div id="timer" class="timer"></div>
+    <div id="message" class="message"></div>
   </div>
+  <button id="pauseButton">Pause</button>
 
-  <script>
-    const answeredQuestions = [
-      {
-        question: "How does the brain store memories?",
-        options: [
-          "By absorbing sunlight through the skull",
-          "Through neurons using chemical and electrical signals",
-          "By drinking lots of water",
-          "With muscle reflexes"
-        ],
-        answer: "Through neurons using chemical and electrical signals",
-        timer: 30
-      },
-      {
-        question: "What causes déjà vu?",
-        options: [
-          "Eating too much sugar",
-          "A temporary brain glitch making new experiences feel familiar",
-          "Seeing into the future",
-          "Having a photographic memory"
-        ],
-        answer: "A temporary brain glitch making new experiences feel familiar",
-        timer: 30
-      },
-      {
-        question: "How do plants know where to grow?",
-        options: [
-          "They can hear music",
-          "They follow ants",
-          "They use light and gravity sensors",
-          "They are controlled by fungi"
-        ],
-        answer: "They use light and gravity sensors",
-        timer: 30
-      },
-      {
-        question: "Why does music affect emotion?",
-        options: [
-          "It increases blood pressure",
-          "It confuses the ears",
-          "It stimulates the brain’s reward system and evokes memory",
-          "It has secret messages"
-        ],
-        answer: "It stimulates the brain’s reward system and evokes memory",
-        timer: 30
-      },
-      {
-        question: "What is quantum entanglement?",
-        options: [
-          "A type of magic",
-          "Particles linked to each other that affect each other instantly",
-          "A tangled ball of energy",
-          "Atoms exploding"
-        ],
-        answer: "Particles linked to each other that affect each other instantly",
-        timer: 30
-      }
-    ];
-
-    let currentQuestionIndex = 0;
-    let currentTimer = answeredQuestions[currentQuestionIndex].timer;
-    let timerInterval;
-
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        currentTimer--;
-        document.getElementById('timer').textContent = `Time remaining: ${currentTimer}s`;
-
-        if (currentTimer <= 0) {
-          clearInterval(timerInterval);
-          alert("Time's up!");
-          showNextQuestion();
-        }
-      }, 1000);
-    }
-
-    function showNextQuestion() {
-      if (currentQuestionIndex < answeredQuestions.length - 1) {
-        currentQuestionIndex++;
-        displayQuestion();
-      } else {
-        alert("Game Over! You've completed all questions.");
-      }
-    }
-
-    function displayQuestion() {
-      const question = answeredQuestions[currentQuestionIndex];
-      document.getElementById('question').textContent = question.question;
-      document.getElementById('options').innerHTML = '';
-      
-      question.options.forEach(option => {
-        const button = document.createElement('button');
-        button.classList.add('option');
-        button.textContent = option;
-        button.onclick = () => handleAnswer(option, question.answer);
-        document.getElementById('options').appendChild(button);
-      });
-
-      currentTimer = question.timer;
-      startTimer();
-    }
-
-    function handleAnswer(selectedOption, correctAnswer) {
-      if (selectedOption === correctAnswer) {
-        alert("Correct!");
-      } else {
-        alert(`Incorrect! The correct answer was: ${correctAnswer}`);
-      }
-      clearInterval(timerInterval);
-      showNextQuestion();
-    }
-
-    // Initialize the game
-    displayQuestion();
-  </script>
+  <script src="game.js"></script>
 </body>
 </html>
